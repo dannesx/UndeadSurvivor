@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed;
+    public int damage;
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private SpriteRenderer sprite;
