@@ -4,25 +4,69 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [HideInInspector]
-    public Transform player;
-
-    public int health;
+    public float health;
     public float speed;
     public float attackSpeed;
     public float damage;
+    public bool isAlive = true;
+
+    private Rigidbody2D rb;
+    private SpriteRenderer sprite;
+    private Animator anim;
+    private Collider2D col;
+    private Player player;
+
+    [HideInInspector]
+    public Rigidbody2D target;
 
     public void Start(){
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        rb = GetComponent<Rigidbody2D>();
+        sprite = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
+        col = GetComponent<Collider2D>();
+        
+        target = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
-    public void Damage(){}
+    public void FixedUpdate(){
+        if(target != null && isAlive){
+            Vector2 direction = target.position - rb.position;
+            Vector2 movement = direction.normalized * speed * Time.fixedDeltaTime;
 
-    public void TakeDamage(int amount){
+            rb.MovePosition(rb.position + movement);
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+    public void LateUpdate(){
+        if(isAlive) sprite.flipX = target.position.x < transform.position.x;
+    }
+
+    public void Attack(){
+        player.TakeDamage(damage);
+        Debug.Log("Attack! HP: " + player.health);
+    }
+
+    public void TakeDamage(float amount){
         health -= amount;
 
         if(health <= 0){
-            Destroy(this.gameObject);
+            Death();
+        } else {
+            anim.SetTrigger("Hit");
         }
+    }
+
+    public void Death(){
+        isAlive = false;
+        col.enabled = false;
+        sprite.sortingOrder = 0;
+        anim.SetBool("Dead", true);
+        Destroy(this.gameObject, 1f);
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.CompareTag("Player")) Attack();
     }
 }

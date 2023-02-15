@@ -5,7 +5,9 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed;
-    public int damage;
+    public float damage;
+    public float health;
+
     private Rigidbody2D rb;
     private Vector2 moveInput;
     private SpriteRenderer sprite;
@@ -34,5 +36,13 @@ public class Player : MonoBehaviour
         Vector3 screenPoint = Camera.main.WorldToScreenPoint(transform.position);
 
         sprite.flipX = mouse.x < screenPoint.x;
+    }
+
+    public void TakeDamage(float amount){
+        health -= amount;
+        
+        if(health <= 0){
+            Destroy(this.gameObject);
+        }
     }
 }
