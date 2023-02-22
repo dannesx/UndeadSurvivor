@@ -13,10 +13,13 @@ public class Player : MonoBehaviour
     private SpriteRenderer sprite;
     private Animator anim;
 
+    [HideInInspector] public GameManager GM;
+
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        GM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     void Update(){
@@ -42,7 +45,16 @@ public class Player : MonoBehaviour
         health -= amount;
         
         if(health <= 0){
-            Destroy(this.gameObject);
+            Death();
         }
+    }
+
+    public void Death(){
+        anim.SetTrigger("Dead");
+        Invoke("GameOver", 0.2f);
+    }
+
+    public void GameOver(){
+        GM.GameOver();
     }
 }

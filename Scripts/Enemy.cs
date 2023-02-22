@@ -8,6 +8,7 @@ public class Enemy : MonoBehaviour
     public float speed;
     public float attackSpeed;
     public float damage;
+    public float points;
     public bool isAlive = true;
 
     private Rigidbody2D rb;
@@ -16,8 +17,8 @@ public class Enemy : MonoBehaviour
     private Collider2D col;
     private Player player;
 
-    [HideInInspector]
-    public Rigidbody2D target;
+    [HideInInspector] public Rigidbody2D target;
+    [HideInInspector] public GameManager GM;
 
     public void Start(){
         rb = GetComponent<Rigidbody2D>();
@@ -27,6 +28,8 @@ public class Enemy : MonoBehaviour
         
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody2D>();
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
+        GM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
     }
 
     public void FixedUpdate(){
@@ -63,6 +66,8 @@ public class Enemy : MonoBehaviour
         col.enabled = false;
         sprite.sortingOrder = 0;
         anim.SetBool("Dead", true);
+        GM.AddKill();
+        GM.AddScore(points);
         Destroy(this.gameObject, 1f);
     }
 
