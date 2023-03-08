@@ -9,6 +9,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed;
     public float damage;
     public float points;
+    public float xp;
     public bool isAlive = true;
 
     private Rigidbody2D rb;
@@ -68,6 +69,7 @@ public class Enemy : MonoBehaviour
         anim.SetBool("Dead", true);
         GM.AddKill();
         GM.AddScore(points);
+        player.AddXP(xp);
         Destroy(this.gameObject, 1f);
     }
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private Player p;
+    private Experience xp;
 
     public Bar hpFill;
     public Bar xpFill;
@@ -18,12 +19,17 @@ public class GameManager : MonoBehaviour
 
     void Start(){
         p = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+        xp = GameObject.FindGameObjectWithTag("Player").GetComponent<Experience>();
         weapon = GameObject.FindGameObjectWithTag("Weapon");
         hpFill.maxValue = p.health;
     }
 
     void LateUpdate(){
         hpFill.currentValue = p.health;
+
+        xpFill.currentValue = xp.currentXP;
+        xpFill.maxValue = xp.maxXP;
+
         killsTXT.amount = kills;
         scoreTXT.amount = Mathf.RoundToInt(score);
     }

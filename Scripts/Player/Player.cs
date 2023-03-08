@@ -14,12 +14,14 @@ public class Player : MonoBehaviour
     private Animator anim;
 
     [HideInInspector] public GameManager GM;
+    [HideInInspector] public Experience XP;
 
     void Awake(){
         rb = GetComponent<Rigidbody2D>();
         sprite = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         GM = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        XP = GetComponent<Experience>();
     }
 
     void Update(){
@@ -49,9 +51,17 @@ public class Player : MonoBehaviour
         }
     }
 
+    public void HealSelf(float amount){
+        health += amount;
+    }
+
     public void Death(){
         anim.SetTrigger("Dead");
         Invoke("GameOver", 0.2f);
+    }
+
+    public void AddXP(float amount){
+        XP.AddXP(amount);
     }
 
     public void GameOver(){

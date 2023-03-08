@@ -247,6 +247,7 @@ MonoBehaviour:
   attackSpeed: 0
   damage: 30
   points: 3
+  xp: 10
   isAlive: 1
   target: {fileID: 0}
   GM: {fileID: 0}
